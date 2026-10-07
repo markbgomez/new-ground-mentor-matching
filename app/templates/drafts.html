@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div style="margin-bottom: var(--space-xl);">
+  <a href="/" style="text-decoration: none; font-size: 0.9rem;">← Back to Pipeline</a>
+  <span class="eyebrow" style="margin-top: 12px;">HUMAN-GATED INVITATION REVIEW</span>
+  <h1>Review Mentor Invitation Drafts</h1>
+  <p>Review the 3 invitations before sending. The verifier checks each invitation to ensure no mentee contact PII or unconsented attributes are exposed.</p>
+</div>
+
+<form action="/approve-send-invites" method="POST" onsubmit="return confirm('DEMO MODE: 3 emails will be delivered to mgomez@project127.org. Proceed with sending?');">
+  <input type="hidden" name="selection_id" value="{{ selection.selection_id }}">
+
+  <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: var(--space-lg); margin-bottom: var(--space-xl);">
+    {% for draft in selection.drafts %}
+    <div class="card card-candidate">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+        <h3>{{ draft.mentor_name }}</h3>
+        {% if draft.verifier_passed %}
+        <span class="badge badge-accepted">✓ Verifier Passed</span>
+        {% else %}
+        <span class="badge badge-declined" style="background: var(--p127-red-dark); color: white;">Needs Review</span>
+        {% endif %}
+      </div>
+      <p style="font-size: 0.85rem; color: #666; margin-bottom: 8px;"><strong>Subject:</strong> {{ draft.subject }}</p>
+      <textarea name="draft_body_{{ draft.invitation_id }}" style="width: 100%; height: 350px; font-family: var(--font-body); font-size: 0.85rem; padding: 12px; border: 1px solid var(--p127-border);" readonly>{{ draft.body }}</textarea>
+      <div style="margin-top: 12px;">
+        <a href="{{ draft.portal_url }}" target="_blank" style="font-size: 0.8rem;">[Preview Response Portal Link]</a>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+
+  <div class="card" style="border-top: 4px solid var(--p127-red); display: flex; justify-content: space-between; align-items: center;">
+    <div>
+      <h3>Human-Gated Authorization</h3>
+      <p style="font-size: 0.9rem; color: #666;">This is the only path that sends invitations. Invited mentors are placed on hold.</p>
+    </div>
+    <button type="submit" class="btn btn-primary">Approve & Send Mentor Invitations →</button>
+  </div>
+</form>
+{% endblock %}

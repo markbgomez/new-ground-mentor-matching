@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div style="margin-bottom: var(--space-xl);">
+  <a href="/" style="text-decoration: none; font-size: 0.9rem;">← Back to Pipeline</a>
+  <span class="eyebrow" style="margin-top: 12px;">FINAL MATCH CONFIRMATION</span>
+  <h1>Confirm Match for {{ mentee.first_name }} {{ mentee.last_initial }}.</h1>
+  <p>The mentee has made their selection! Confirm the match to transition statuses and send closing communications.</p>
+</div>
+
+<div class="card" style="border-left: 6px solid var(--p127-green); margin-bottom: var(--space-xl);">
+  <h3>Mentee Choice: {{ chosen_mentor.first_name }} {{ chosen_mentor.last_initial }}.</h3>
+  <p style="font-size: 0.95rem; margin-top: 8px;"><strong>Mentor City:</strong> {{ chosen_mentor.city }}</p>
+  <p style="font-size: 0.95rem;"><strong>Bio:</strong> {{ chosen_mentor.mentee_facing_bio }}</p>
+</div>
+
+<form action="/confirm-match-action" method="POST">
+  <input type="hidden" name="mentee_id" value="{{ mentee.mentee_id }}">
+  <input type="hidden" name="mentor_id" value="{{ chosen_mentor.mentor_id }}">
+
+  <div class="card" style="border-top: 4px solid var(--p127-red); display: flex; justify-content: space-between; align-items: center;">
+    <div>
+      <h3>Confirm & Complete Match</h3>
+      <p style="font-size: 0.9rem; color: #666;">
+        Transfers status to 'matched', releases remaining holds, and sends confirmation emails to the matched mentor and gracious notes to other candidates.
+      </p>
+    </div>
+    <button type="submit" class="btn btn-primary">Confirm Match & Send Confirmations →</button>
+  </div>
+</form>
+{% endblock %}

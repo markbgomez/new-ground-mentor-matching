@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Choose Your Mentor · New Ground</title>
+  <link rel="stylesheet" href="/ui/theme.css">
+  <link rel="stylesheet" href="/ui/components.css">
+  <style>
+    body { background-color: #f7f9fa; }
+    .portal-container {
+      max-width: 640px;
+      margin: 0 auto;
+      padding: var(--space-lg);
+    }
+    .hero-band {
+      background-color: var(--p127-slate);
+      color: white;
+      padding: 32px var(--space-lg);
+      margin-bottom: var(--space-lg);
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+  <div class="hero-band">
+    <span class="eyebrow" style="color: var(--p127-blue);">NEW GROUND MENTORING</span>
+    <h2 style="color: white; margin-bottom: 8px;">Your Potential Mentors</h2>
+    <p style="font-size: 0.95rem; opacity: 0.9;">These caring mentors have already said yes and would love to meet you!</p>
+  </div>
+
+  <div class="portal-container">
+    <form action="/o/respond" method="POST">
+      <input type="hidden" name="token" value="{{ token }}">
+
+      <div style="display: flex; flex-direction: column; gap: var(--space-lg); margin-bottom: var(--space-xl);">
+        {% for m in mentor_cards %}
+        <div class="card" style="border-left: 6px solid var(--p127-green);">
+          <span class="eyebrow">MENTOR PROFILE</span>
+          <h3>{{ m.first_name }} {{ m.last_initial }}.</h3>
+          <p style="font-size: 0.9rem; color: #666; margin-bottom: 8px;">Location: {{ m.city }}</p>
+          <p style="font-size: 0.95rem; line-height: 1.6; margin-bottom: 16px;">{{ m.bio }}</p>
+          <button type="submit" name="chosen_mentor_id" value="{{ m.mentor_id }}" class="btn btn-primary" style="width: 100%;">
+            Choose {{ m.first_name }} →
+          </button>
+        </div>
+        {% endfor %}
+      </div>
+
+      <div class="card" style="text-align: center;">
+        <p style="font-size: 0.85rem; color: #666; margin-bottom: 8px;">
+          Don't feel a connection with these options? That is completely okay!
+        </p>
+        <button type="submit" name="chosen_mentor_id" value="none_fit" class="btn btn-outline" style="width: 100%;">
+          None of these feel right
+        </button>
+      </div>
+    </form>
+
+    <footer style="text-align: center; margin-top: var(--space-xl); font-size: 0.8rem; color: #888;">
+      <p>SUPPORT · ENCOURAGEMENT · RESOURCES · CONNECTION</p>
+      <p style="margin-top: 4px;"><a href="https://www.project127.org" target="_blank" style="color: #888;">Project 1.27</a></p>
+    </footer>
+  </div>
+</body>
+</html>

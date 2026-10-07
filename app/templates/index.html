@@ -1,0 +1,134 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div style="margin-bottom: var(--space-xl);">
+  <span class="eyebrow">NEW GROUND MENTORING PROGRAM</span>
+  <h1>Coordinator Matching Pipeline</h1>
+  <p style="color: #666; max-width: 800px;">
+    AI-powered matching assistant with human-in-the-loop governance. Volunteers accept first so young adults never face rejection.
+  </p>
+</div>
+
+<!-- Escalations Banner if any -->
+{% for m in mentees if m.status == 'needs_review' %}
+<div class="banner-escalation">
+  <div style="font-size: 1.5rem;">⚠️</div>
+  <div>
+    <h4>Needs Human Review: {{ m.first_name }} {{ m.last_initial }}.</h4>
+    <p>{{ m.notes_text }}</p>
+    <a href="/match/{{ m.mentee_id }}" class="btn btn-secondary" style="margin-top: 8px; padding: 6px 12px; font-size: 0.8rem;">Review Case</a>
+  </div>
+</div>
+{% endfor %}
+
+<!-- Pipeline Columns -->
+<div class="pipeline-container">
+  <!-- Col 1: Intake -->
+  <div class="pipeline-col">
+    <div class="pipeline-header">
+      <span>1. Intake ({{ pipeline.intake|length }})</span>
+    </div>
+    {% for m in pipeline.intake %}
+    <div class="card card-candidate">
+      <h3>{{ m.first_name }} {{ m.last_initial }}. ({{ m.age }})</h3>
+      <p style="font-size: 0.9rem; margin-bottom: 8px;"><strong>City:</strong> {{ m.city }}</p>
+      <p style="font-size: 0.85rem; color: #555; margin-bottom: 12px;">{{ m.goals_text[:90] }}...</p>
+      <a href="/match/{{ m.mentee_id }}" class="btn btn-primary" style="width: 100%; font-size: 0.85rem; padding: 8px;">Run Agent Match</a>
+    </div>
+    {% else %}
+    <p style="font-size: 0.85rem; color: #888; text-align: center; padding: 20px;">No mentees in intake</p>
+    {% endfor %}
+  </div>
+
+  <!-- Col 2: Proposed Top 5 -->
+  <div class="pipeline-col">
+    <div class="pipeline-header">
+      <span>2. Proposed ({{ pipeline.proposed|length }})</span>
+    </div>
+    {% for m in pipeline.proposed %}
+    <div class="card card-candidate" style="border-left-color: var(--p127-blue);">
+      <h3>{{ m.first_name }} {{ m.last_initial }}.</h3>
+      <span class="badge badge-pending" style="margin-bottom: 8px;">Top 5 Ready</span>
+      <p style="font-size: 0.85rem; color: #555; margin-bottom: 12px;">Agent scored 40 mentors against mentee criteria.</p>
+      <a href="/proposal/{{ m.mentee_id }}" class="btn btn-secondary" style="width: 100%; font-size: 0.85rem; padding: 8px;">Select 3 Mentors</a>
+    </div>
+    {% else %}
+    <p style="font-size: 0.85rem; color: #888; text-align: center; padding: 20px;">None proposed</p>
+    {% endfor %}
+  </div>
+
+  <!-- Col 3: Mentor Review -->
+  <div class="pipeline-col">
+    <div class="pipeline-header">
+      <span>3. Mentor Review ({{ pipeline.mentor_review|length }})</span>
+    </div>
+    {% for m in pipeline.mentor_review %}
+    <div class="card card-candidate" style="border-left-color: var(--p127-slate);">
+      <h3>{{ m.first_name }} {{ m.last_initial }}.</h3>
+      <p style="font-size: 0.85rem; margin-bottom: 8px;">Invitations sent. Tracking responses.</p>
+      <a href="/tracker/{{ m.mentee_id }}" class="btn btn-outline" style="width: 100%; font-size: 0.85rem; padding: 8px;">Track Mentors</a>
+    </div>
+    {% else %}
+    <p style="font-size: 0.85rem; color: #888; text-align: center; padding: 20px;">None pending review</p>
+    {% endfor %}
+  </div>
+
+  <!-- Col 4: Ready to Offer -->
+  <div class="pipeline-col">
+    <div class="pipeline-header">
+      <span>4. Ready for Offer ({{ pipeline.ready_to_offer|length }})</span>
+    </div>
+    {% for m in pipeline.ready_to_offer %}
+    <div class="card card-candidate" style="border-left-color: var(--p127-green);">
+      <h3>{{ m.first_name }} {{ m.last_initial }}.</h3>
+      <span class="badge badge-accepted" style="margin-bottom: 8px;">✓ 2+ Accepted</span>
+      <p style="font-size: 0.85rem; margin-bottom: 8px;">Mentors confirmed willingness to match.</p>
+      <a href="/prepare-offer/{{ m.mentee_id }}" class="btn btn-primary" style="width: 100%; font-size: 0.85rem; padding: 8px;">Prepare Offer</a>
+    </div>
+    {% endfor %}
+  </div>
+
+  <!-- Col 5: Offer Sent -->
+  <div class="pipeline-col">
+    <div class="pipeline-header">
+      <span>5. Offer Sent ({{ pipeline.offer_sent|length }})</span>
+    </div>
+    {% for m in pipeline.offer_sent %}
+    <div class="card card-candidate" style="border-left-color: var(--p127-blue-dark);">
+      <h3>{{ m.first_name }} {{ m.last_initial }}.</h3>
+      <p style="font-size: 0.85rem; margin-bottom: 8px;">Mentee reviewing options on mobile portal.</p>
+      <a href="/portal-preview/{{ m.mentee_id }}" class="btn btn-outline" style="width: 100%; font-size: 0.8rem; padding: 6px;">Simulate Mentee</a>
+    </div>
+    {% endfor %}
+  </div>
+
+  <!-- Col 6: Mentee Selected -->
+  <div class="pipeline-col">
+    <div class="pipeline-header">
+      <span>6. Choice Made ({{ pipeline.mentee_selected|length }})</span>
+    </div>
+    {% for m in pipeline.mentee_selected %}
+    <div class="card card-candidate" style="border-left-color: var(--p127-green);">
+      <h3>{{ m.first_name }} {{ m.last_initial }}.</h3>
+      <span class="badge badge-accepted" style="margin-bottom: 8px;">Chosen!</span>
+      <p style="font-size: 0.85rem; margin-bottom: 8px;">Mentee made their selection.</p>
+      <a href="/confirm-match/{{ m.mentee_id }}" class="btn btn-primary" style="width: 100%; font-size: 0.85rem; padding: 8px;">Confirm Match</a>
+    </div>
+    {% endfor %}
+  </div>
+
+  <!-- Col 7: Matched -->
+  <div class="pipeline-col">
+    <div class="pipeline-header">
+      <span>7. Matched ({{ pipeline.matched|length }})</span>
+    </div>
+    {% for m in pipeline.matched %}
+    <div class="card card-candidate" style="border-left-color: var(--p127-green); background: #fafffa;">
+      <h3>{{ m.first_name }} {{ m.last_initial }}.</h3>
+      <span class="badge badge-accepted">✓ Matched</span>
+      <p style="font-size: 0.85rem; color: #444; margin-top: 8px;">Match confirmed and intro scheduled.</p>
+    </div>
+    {% endfor %}
+  </div>
+</div>
+{% endblock %}

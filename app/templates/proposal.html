@@ -1,0 +1,217 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div style="margin-bottom: var(--space-xl);">
+  <a href="/" style="text-decoration: none; font-size: 0.9rem;">← Back to Pipeline</a>
+  <span class="eyebrow" style="margin-top: 12px;">MATCH PROPOSAL</span>
+  <h1>Top 5 Mentors for {{ mentee.first_name }} {{ mentee.last_initial }}.</h1>
+  <p>Select exactly 3 mentors to invite. Review the mentee's full intake details and each mentor's complete profile below.</p>
+</div>
+
+<!-- Mentee Profile Dropdown Drawer -->
+<div class="card" style="border-left: 6px solid var(--p127-blue); margin-bottom: var(--space-xl); background: #ffffff;">
+  <details>
+    <summary style="display: flex; justify-content: space-between; align-items: center; cursor: pointer; user-select: none;">
+      <div style="display: flex; align-items: center; gap: 12px;">
+        <span style="font-size: 1.4rem;">👤</span>
+        <div>
+          <span class="eyebrow" style="margin-bottom: 2px;">MENTEE INTAKE PROFILE</span>
+          <h3 style="margin-bottom: 0; display: inline;">{{ mentee.first_name }} {{ mentee.last_initial }}. (Age {{ mentee.age or "18-24" }})</h3>
+          <span style="margin-left: 10px; font-size: 0.9rem; color: #555;">{{ mentee.city }} ({{ mentee.zip }})</span>
+        </div>
+      </div>
+      <span class="btn btn-outline" style="padding: 6px 14px; font-size: 0.8rem; pointer-events: none;">
+        Click to View Full Mentee Intake ▼
+      </span>
+    </summary>
+
+    <div style="margin-top: 16px; border-top: 1px solid #e2e8f0; padding-top: 16px; font-size: 0.9rem;">
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px;">
+        <!-- Goals & Life Situation -->
+        <div>
+          <h4 style="color: var(--p127-slate); font-size: 0.95rem; margin-bottom: 6px;">Stated Goals & Desired Support</h4>
+          <p style="background: var(--p127-sky); padding: 12px; border-left: 4px solid var(--p127-blue); font-style: italic; margin-bottom: 14px;">
+            "{{ mentee.goals_text }}"
+          </p>
+
+          <h4 style="color: var(--p127-slate); font-size: 0.95rem; margin-bottom: 6px;">Section 6: Profile Sharing Consent</h4>
+          <p style="margin-bottom: 6px;">
+            Consent Level: <strong class="badge badge-accepted">{{ mentee.mentor_share_consent }}</strong>
+          </p>
+          <p style="margin-bottom: 6px;">
+            Shared Fields: <strong>{{ mentee.mentor_share_fields|join(', ') if mentee.mentor_share_fields else 'Standard Defaults' }}</strong>
+          </p>
+          <p style="margin-bottom: 14px;">
+            Sensitive Identifications Shared: <strong>{{ "Yes (Explicitly Opted In)" if mentee.share_identifications else "No (Private / Not Shared)" }}</strong>
+          </p>
+
+          {% if mentee.identifies_lgbtq or mentee.substance_recovery or mentee.immigration_refugee or mentee.is_parenting or mentee.legal_history or mentee.developmental %}
+          <h4 style="color: var(--p127-slate); font-size: 0.95rem; margin-bottom: 6px;">Self-Disclosed Background (Intake)</h4>
+          <div style="display: flex; gap: 6px; flex-wrap: wrap;">
+            {% if mentee.identifies_lgbtq %}<span class="badge badge-tag">LGBTQ+</span>{% endif %}
+            {% if mentee.substance_recovery %}<span class="badge badge-tag">Substance Recovery</span>{% endif %}
+            {% if mentee.immigration_refugee %}<span class="badge badge-tag">Immigrant/Refugee</span>{% endif %}
+            {% if mentee.is_parenting %}<span class="badge badge-tag">Parenting</span>{% endif %}
+            {% if mentee.legal_history %}<span class="badge badge-tag">Justice Involved</span>{% endif %}
+            {% if mentee.developmental %}<span class="badge badge-tag">Developmental Support</span>{% endif %}
+          </div>
+          {% endif %}
+        </div>
+
+        <!-- Practical & Logistical Needs -->
+        <div>
+          <h4 style="color: var(--p127-slate); font-size: 0.95rem; margin-bottom: 6px;">Support Needs Ratings (1–5)</h4>
+          <ul style="list-style: none; padding-left: 0; margin-bottom: 14px; display: grid; grid-template-columns: 1fr 1fr; gap: 4px; font-size: 0.85rem;">
+            <li>Career & Education: <strong>{{ mentee.need_career_education or 3 }}/5</strong></li>
+            <li>Financial & Life Skills: <strong>{{ mentee.need_financial_life_skills or 3 }}/5</strong></li>
+            <li>Personal Growth: <strong>{{ mentee.need_personal_growth or 3 }}/5</strong></li>
+            <li>Emotional Wellbeing: <strong>{{ mentee.need_emotional_wellbeing or 3 }}/5</strong></li>
+            <li>Spiritual Growth: <strong>{{ mentee.need_spiritual_growth or 3 }}/5</strong></li>
+            <li>Relationships & Family: <strong>{{ mentee.need_relationships_family or 3 }}/5</strong></li>
+          </ul>
+
+          <h4 style="color: var(--p127-slate); font-size: 0.95rem; margin-bottom: 6px;">Logistics & Preferences</h4>
+          <p style="margin-bottom: 4px;"><strong>Transportation:</strong> {{ mentee.transportation }}</p>
+          <p style="margin-bottom: 4px;"><strong>Schedule Availability:</strong> {{ mentee.schedule_blocks|join(', ') if mentee.schedule_blocks else mentee.schedule_raw }}</p>
+          <p style="margin-bottom: 4px;"><strong>Meeting Frequency:</strong> {{ mentee.meeting_frequency }}</p>
+          <p style="margin-bottom: 4px;"><strong>Spiritual Focus:</strong> {{ mentee.spiritual_alignment }}</p>
+          <p style="margin-bottom: 4px;"><strong>Open to Virtual:</strong> {{ "Yes" if mentee.open_to_virtual else "No" }}</p>
+          <p style="margin-bottom: 4px;"><strong>Hobbies & Interests:</strong> {{ mentee.hobbies_text }}</p>
+        </div>
+      </div>
+    </div>
+  </details>
+</div>
+
+<!-- Step Feed from Agent -->
+<div class="card" style="background: var(--p127-sky); border: none; margin-bottom: var(--space-xl);">
+  <details>
+    <summary style="font-family: var(--font-heading); font-size: 0.95rem; font-weight: 700; cursor: pointer; color: var(--p127-slate);">
+      Agent Multi-Step Feed (8 Steps Completed) ▼
+    </summary>
+    <ul style="list-style: none; padding-left: 0; margin-top: 12px;">
+      {% for s in proposal.steps_log %}
+      <li style="margin-bottom: 6px; font-size: 0.85rem;">
+        <strong>Step {{ s.step }} [{{ s.name }}]:</strong> {{ s.message }}
+      </li>
+      {% endfor %}
+    </ul>
+  </details>
+</div>
+
+<form action="/select-3" method="POST">
+  <input type="hidden" name="proposal_id" value="{{ proposal.proposal_id }}">
+  <input type="hidden" name="mentee_id" value="{{ mentee.mentee_id }}">
+
+  <div style="display: flex; flex-direction: column; gap: var(--space-md); margin-bottom: var(--space-xl);">
+    {% for cand in proposal.top_5 %}
+    <div class="card card-candidate">
+      <div style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 12px;">
+        <div style="max-width: 800px;">
+          <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 8px;">
+            <input type="checkbox" name="mentor_ids" value="{{ cand.mentor_id }}" id="m_{{ cand.mentor_id }}" style="width: 22px; height: 22px; cursor: pointer;" {% if loop.index <= 3 %}checked{% endif %}>
+            <label for="m_{{ cand.mentor_id }}" style="font-family: var(--font-heading); font-size: 1.25rem; font-weight: 700; cursor: pointer;">
+              Rank {{ loop.index }}: {{ cand.mentor_name }} ({{ cand.mentor_obj.city }})
+            </label>
+            <span class="badge badge-accepted">Score: {{ cand.total_score }}/100</span>
+            {% if cand.virtual_first %}<span class="badge" style="background: #e2e8f0;">Virtual First</span>{% endif %}
+          </div>
+          <p style="font-size: 0.9rem; margin-bottom: 8px;">{{ cand.explanation }}</p>
+          <div style="display: flex; flex-wrap: wrap; gap: 8px;">
+            <span class="badge badge-tag">Distance: {{ cand.distance_miles }} mi</span>
+            <span class="badge badge-tag">Support Area Fit: {{ cand.sub_scores.support_area_fit }}/15</span>
+            <span class="badge badge-tag">Mentee Prefs: {{ cand.sub_scores.mentee_preferences }}/30</span>
+            <span class="badge badge-tag">Availability: {{ cand.sub_scores.availability }}/15</span>
+          </div>
+        </div>
+        <div style="text-align: right;">
+          <span style="font-size: 0.85rem; color: #666;">Capacity: {{ cand.mentor_obj.current_mentee_count }}/{{ cand.mentor_obj.max_mentees }}</span>
+        </div>
+      </div>
+
+      <!-- Expandable Mentor Profile Dropdown Drawer -->
+      <details style="margin-top: 14px; border-top: 1px solid #e2e8f0; padding-top: 10px;">
+        <summary style="font-family: var(--font-heading); font-size: 0.85rem; font-weight: 700; color: var(--p127-link); cursor: pointer; user-select: none;">
+          🔍 Review Full Profile & Intake Responses for {{ cand.mentor_name }} ▼
+        </summary>
+        <div style="margin-top: 12px; background: #f8fafc; padding: 16px; border: 1px solid #e1eff5; font-size: 0.85rem;">
+          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px;">
+            <!-- Column 1: Bio & Experience -->
+            <div>
+              <h4 style="margin-bottom: 6px; font-size: 0.9rem; color: var(--p127-slate);">Mentee-Facing Bio (Section 7)</h4>
+              <p style="color: #444; margin-bottom: 12px; font-style: italic;">
+                "{{ cand.mentor_obj.mentee_facing_bio or 'No public bio provided' }}"
+              </p>
+
+              <h4 style="margin-bottom: 6px; font-size: 0.9rem; color: var(--p127-slate);">Experience & Background</h4>
+              <p style="color: #444; margin-bottom: 12px;">{{ cand.mentor_obj.skills_experience_text }}</p>
+
+              <h4 style="margin-bottom: 6px; font-size: 0.9rem; color: var(--p127-slate);">Hobbies & Interests</h4>
+              <p style="color: #444;">{{ cand.mentor_obj.hobbies_text }}</p>
+            </div>
+
+            <!-- Column 2: Ratings & Logistics -->
+            <div>
+              <h4 style="margin-bottom: 6px; font-size: 0.9rem; color: var(--p127-slate);">Comfort Ratings (1–5)</h4>
+              <ul style="list-style: none; padding-left: 0; margin-bottom: 12px; display: grid; grid-template-columns: 1fr 1fr; gap: 4px;">
+                <li>LGBTQ+: <strong>{{ cand.mentor_obj.comfort_lgbtq }}/5</strong></li>
+                <li>Substance Recovery: <strong>{{ cand.mentor_obj.comfort_substance }}/5</strong></li>
+                <li>Immigration/Refugee: <strong>{{ cand.mentor_obj.comfort_immigration }}/5</strong></li>
+                <li>Parenting: <strong>{{ cand.mentor_obj.comfort_parenting }}/5</strong></li>
+                <li>Justice Involved: <strong>{{ cand.mentor_obj.comfort_legal }}/5</strong></li>
+                <li>Developmental: <strong>{{ cand.mentor_obj.comfort_developmental }}/5</strong></li>
+              </ul>
+
+              <h4 style="margin-bottom: 6px; font-size: 0.9rem; color: var(--p127-slate);">Support Strengths (1–5)</h4>
+              <ul style="list-style: none; padding-left: 0; margin-bottom: 12px; display: grid; grid-template-columns: 1fr 1fr; gap: 4px;">
+                <li>Career/Ed: <strong>{{ cand.mentor_obj.support_career_education }}/5</strong></li>
+                <li>Financial: <strong>{{ cand.mentor_obj.support_financial_life_skills }}/5</strong></li>
+                <li>Emotional: <strong>{{ cand.mentor_obj.support_emotional_wellbeing }}/5</strong></li>
+                <li>Personal Growth: <strong>{{ cand.mentor_obj.support_personal_growth }}/5</strong></li>
+                <li>Spiritual: <strong>{{ cand.mentor_obj.support_spiritual_growth }}/5</strong></li>
+                <li>Relationships: <strong>{{ cand.mentor_obj.support_relationships_family }}/5</strong></li>
+              </ul>
+
+              <h4 style="margin-bottom: 6px; font-size: 0.9rem; color: var(--p127-slate);">Logistics & Faith</h4>
+              <p style="color: #444; margin-bottom: 4px;">
+                <strong>Travel Bucket:</strong> {{ cand.mentor_obj.max_travel_bucket }} | <strong>Virtual:</strong> {{ "Yes" if cand.mentor_obj.open_to_virtual else "No" }}
+              </p>
+              <p style="color: #444; margin-bottom: 4px;">
+                <strong>Available:</strong> {{ cand.mentor_obj.schedule_blocks|join(', ') if cand.mentor_obj.schedule_blocks else cand.mentor_obj.schedule_raw }}
+              </p>
+              <p style="color: #444;">
+                <strong>Spiritual Focus:</strong> {{ cand.mentor_obj.spiritual_conversation_importance }}
+              </p>
+            </div>
+          </div>
+        </div>
+      </details>
+    </div>
+    {% endfor %}
+  </div>
+
+  <div class="card" style="border-top: 4px solid var(--p127-red); display: flex; justify-content: space-between; align-items: center;">
+    <div>
+      <h3>Confirm 3 Candidates</h3>
+      <p style="font-size: 0.9rem; color: #666;">The agent will draft personalized "Possible Match" invitations for each mentor.</p>
+    </div>
+    <button type="submit" class="btn btn-primary">Draft 3 Invitations →</button>
+  </div>
+</form>
+
+<!-- Excluded Mentors Drawer -->
+<div class="card" style="margin-top: var(--space-xl);">
+  <details>
+    <summary style="font-family: var(--font-heading); font-weight: 700; cursor: pointer;">
+      View Excluded Mentors and Why ({{ proposal.excluded|length }})
+    </summary>
+    <div style="margin-top: var(--space-md);">
+      {% for exc in proposal.excluded %}
+      <div style="padding: 8px 0; border-bottom: 1px solid #eee; font-size: 0.85rem;">
+        <strong>{{ exc.mentor_name }}</strong>: {{ exc.reasons|join(', ') }}
+      </div>
+      {% endfor %}
+    </div>
+  </details>
+</div>
+{% endblock %}

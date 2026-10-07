@@ -1,0 +1,33 @@
+weights:
+  mentee_preferences: 30
+  proximity_transport: 20
+  support_area_fit: 15
+  availability: 15
+  comfort_depth: 5
+  faith_alignment: 5
+  interests_goals: 5
+  mentor_preferences: 5
+
+comfort_threshold: 2  # exclude <= 2; 3 is concern; 4-5 is bonus
+proximity:
+  bucket_20_plus_miles: 25.0
+  meet_halfway_allowance_miles: 15.0
+
+confidence_threshold: 0.70
+top_k: 5
+invite_count: 3
+min_accepted_to_offer: 2
+mentor_response_days: 3
+mentor_reminder_after_days: 2
+mentee_offer_expiry_days: 7
+mentee_reminder_after_days: 3
+max_reminders: 2
+mentor_gender_pref_is_hard_filter: false
+
+models:
+  orchestrator: "gemini-2.5-flash"
+  normalizer: "gemini-2.5-flash"
+  invite_writer: "gemini-2.5-flash"
+  offer_writer: "gemini-2.5-flash"
+  follow_up: "gemini-2.5-flash"
+  verifier: "gemini-2.5-pro"

@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div style="margin-bottom: var(--space-xl);">
+  <a href="/tracker/{{ offer.mentee_id }}" style="text-decoration: none; font-size: 0.9rem;">← Back to Tracker</a>
+  <span class="eyebrow" style="margin-top: 12px;">MENTEE OFFER PREVIEW</span>
+  <h1>Offer Draft for {{ mentee.first_name }} {{ mentee.last_initial }}.</h1>
+  <p>Presents ONLY the mentors who have accepted. The mentee makes the final selection on their mobile portal with full agency.</p>
+</div>
+
+<form action="/approve-send-offer" method="POST" onsubmit="return confirm('DEMO MODE: Mentee offer email will be delivered to mgomez@project127.org. Proceed with sending?');">
+  <input type="hidden" name="offer_id" value="{{ offer.offer_id }}">
+
+  <div class="card" style="margin-bottom: var(--space-xl);">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+      <h3>Accepted Mentors Included</h3>
+      <span class="badge badge-accepted">✓ {{ offer.mentor_cards|length }} Mentors Accepted</span>
+    </div>
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 16px; margin-bottom: 16px;">
+      {% for m in offer.mentor_cards %}
+      <div style="padding: 12px; background: var(--p127-sky); border-left: 4px solid var(--p127-blue);">
+        <h4>{{ m.first_name }} {{ m.last_initial }}. ({{ m.city }})</h4>
+        <p style="font-size: 0.85rem; color: #444;">{{ m.bio }}</p>
+      </div>
+      {% endfor %}
+    </div>
+
+    <label style="font-family: var(--font-heading); font-size: 0.9rem; font-weight: 700; display: block; margin-bottom: 8px;">
+      Email Draft Body (6th-8th Grade Tone, Verified against Leakage):
+    </label>
+    <textarea name="offer_body" style="width: 100%; height: 350px; font-family: var(--font-body); font-size: 0.85rem; padding: 12px; border: 1px solid var(--p127-border);" readonly>{{ offer.body }}</textarea>
+    <div style="margin-top: 12px;">
+      <a href="{{ offer.portal_url }}" target="_blank" style="font-size: 0.8rem;">[Preview Mentee Selection Portal Link]</a>
+    </div>
+  </div>
+
+  <div class="card" style="border-top: 4px solid var(--p127-red); display: flex; justify-content: space-between; align-items: center;">
+    <div>
+      <h3>Human-Gated Authorization</h3>
+      <p style="font-size: 0.9rem; color: #666;">Sends the offer email containing single-use choice link to mentee.</p>
+    </div>
+    <button type="submit" class="btn btn-primary">Approve & Send to Mentee →</button>
+  </div>
+</form>
+{% endblock %}

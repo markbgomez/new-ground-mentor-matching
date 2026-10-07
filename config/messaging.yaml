@@ -1,0 +1,6 @@
+delivery_mode: "gmail"  # fallback to simulated
+demo_mode: true
+demo_redirect_to: "mgomez@project127.org"
+allowed_recipients:
+  - "mgomez@project127.org"
+sender_account: "mgomez@project127.org"

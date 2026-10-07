@@ -1,0 +1,47 @@
+skills_tags:
+  - "budgeting_finance"
+  - "career_planning"
+  - "resume_interview"
+  - "cooking_nutrition"
+  - "housing_leasing"
+  - "automotive_transport"
+  - "higher_education_college"
+  - "trade_vocational"
+  - "emotional_regulation"
+  - "communication_conflict"
+  - "parenting_childcare"
+  - "faith_spirituality"
+
+interest_tags:
+  - "sports_fitness"
+  - "outdoor_hiking_camping"
+  - "music_arts"
+  - "gaming_technology"
+  - "cooking_baking"
+  - "animals_pets"
+  - "reading_writing"
+  - "crafts_diy"
+  - "cars_mechanics"
+  - "faith_study"
+
+support_areas:
+  - "support_personal_growth"
+  - "support_career_education"
+  - "support_spiritual_growth"
+  - "support_financial_life_skills"
+  - "support_emotional_wellbeing"
+  - "support_relationships_family"
+  - "support_health_wellness"
+
+schedule_blocks:
+  - "weekday_mornings"
+  - "weekday_afternoons"
+  - "weekday_evenings"
+  - "weekend_mornings"
+  - "weekend_afternoons"
+  - "weekend_evenings"
+
+meeting_frequencies:
+  - "weekly"
+  - "biweekly"
+  - "monthly"

@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{% block title %}New Ground Match Agent · Project 1.27{% endblock %}</title>
+  <link rel="stylesheet" href="/ui/theme.css">
+  <link rel="stylesheet" href="/ui/components.css">
+  <style>
+    .container {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: var(--space-xl) var(--space-lg);
+    }
+  </style>
+</head>
+<body>
+  <!-- Demo Mode Persistent Banner -->
+  <div class="banner-demo">
+    <span><strong>DEMO MODE:</strong> All email is securely redirected to <code>mgomez@project127.org</code></span>
+    <span class="badge" style="background: rgba(255,255,255,0.2); color: #fff;">Synthetic Demo Data</span>
+  </div>
+
+  <!-- Header -->
+  <header class="header-bar">
+    <div class="header-brand">
+      <a href="/" class="header-logo">PROJECT <span>1.27</span> · NEW GROUND</a>
+    </div>
+    <nav class="header-nav">
+      <a href="/">Matching Pipeline</a>
+      <a href="/mentors">Mentors ({{ mentors_count|default(40) }})</a>
+      <a href="/outbox">Outbox ({{ outbox_count|default(0) }})</a>
+      <a href="/logs">Audit Logs</a>
+      <a href="#intake" class="btn btn-primary" style="padding: 6px 14px; font-size: 0.85rem;">+ New Mentee</a>
+    </nav>
+  </header>
+
+  <main class="container">
+    {% block content %}{% endblock %}
+  </main>
+</body>
+</html>

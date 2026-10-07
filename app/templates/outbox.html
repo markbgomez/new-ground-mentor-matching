@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div style="margin-bottom: var(--space-xl);">
+  <a href="/" style="text-decoration: none; font-size: 0.9rem;">← Back to Pipeline</a>
+  <span class="eyebrow" style="margin-top: 12px;">MESSAGING OUTBOX</span>
+  <h1>Demo Outbox & Message Log</h1>
+  <p>All outgoing system messages in Demo Mode are routed to <code>mgomez@project127.org</code> with clear intended recipient prefixes.</p>
+</div>
+
+<div class="card">
+  <table style="width: 100%; border-collapse: collapse; font-size: 0.85rem;">
+    <thead>
+      <tr style="background: var(--p127-slate); color: white; text-align: left;">
+        <th style="padding: 10px;">Sent Time</th>
+        <th style="padding: 10px;">Kind</th>
+        <th style="padding: 10px;">Intended For</th>
+        <th style="padding: 10px;">Delivered To</th>
+        <th style="padding: 10px;">Subject</th>
+        <th style="padding: 10px;">Approved By</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for msg in outbox %}
+      <tr style="border-bottom: 1px solid #ddd;">
+        <td style="padding: 10px;">{{ msg.sent_at[:19] }}</td>
+        <td style="padding: 10px;"><span class="badge badge-tag">{{ msg.kind }}</span></td>
+        <td style="padding: 10px;"><strong>{{ msg.intended_first_name }}</strong> ({{ msg.intended_role }})</td>
+        <td style="padding: 10px;"><code>{{ msg.delivered_to }}</code></td>
+        <td style="padding: 10px;">{{ msg.subject }}</td>
+        <td style="padding: 10px;">{{ msg.approved_by }}</td>
+      </tr>
+      {% else %}
+      <tr>
+        <td colspan="6" style="padding: 24px; text-align: center; color: #888;">No messages sent yet.</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endblock %}

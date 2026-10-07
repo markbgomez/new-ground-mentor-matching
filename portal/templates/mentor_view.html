@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Potential Match Opportunity · New Ground</title>
+  <link rel="stylesheet" href="/ui/theme.css">
+  <link rel="stylesheet" href="/ui/components.css">
+  <style>
+    body { background-color: #f7f9fa; }
+    .portal-container {
+      max-width: 640px;
+      margin: 0 auto;
+      padding: var(--space-lg);
+    }
+    .hero-band {
+      background-color: var(--p127-slate);
+      color: white;
+      padding: 32px var(--space-lg);
+      margin-bottom: var(--space-lg);
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+  <div class="hero-band">
+    <span class="eyebrow" style="color: var(--p127-blue);">NEW GROUND MENTORING</span>
+    <h2 style="color: white; margin-bottom: 8px;">Potential Match Opportunity</h2>
+    <p style="font-size: 0.95rem; opacity: 0.9;">Connecting young adults to caring mentors as they journey into adulthood.</p>
+  </div>
+
+  <div class="portal-container">
+    <div class="card" style="background: var(--p127-sky); border-left: 6px solid var(--p127-blue);">
+      <span class="eyebrow">ABOUT THE YOUNG ADULT</span>
+      <h2>{{ mentee_card.first_name }} (Age {{ mentee_card.age or "18-24" }})</h2>
+      <p style="font-size: 0.95rem; margin-bottom: 8px;"><strong>Location:</strong> {{ mentee_card.general_area }}</p>
+      <p style="font-size: 0.95rem; margin-bottom: 12px;"><strong>Goals & Aspirations:</strong><br>{{ mentee_card.goals }}</p>
+
+      {% if mentee_card.consented_identifications %}
+      <div style="margin-top: 12px;">
+        <span class="eyebrow">CONSENTED BACKGROUND</span>
+        <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+          {% for id_tag in mentee_card.consented_identifications %}
+          <span class="badge badge-tag">{{ id_tag }}</span>
+          {% endfor %}
+        </div>
+      </div>
+      {% endif %}
+    </div>
+
+    <div class="card">
+      <h3>What Accepting Means</h3>
+      <p style="font-size: 0.9rem; color: #555; margin-bottom: 16px;">
+        If you accept, your mentor profile will be shared with {{ mentee_card.first_name }}. In New Ground, our young adults make the final choice. There is no commitment until they select you and our coordinator connects you.
+      </p>
+
+      <form action="/m/respond" method="POST">
+        <input type="hidden" name="token" value="{{ token }}">
+
+        <div style="margin-bottom: var(--space-lg);">
+          <button type="submit" name="response" value="accept" class="btn btn-primary" style="width: 100%; margin-bottom: 12px;">
+            Yes, I'd be glad to be considered
+          </button>
+
+          <details style="margin-top: 16px;">
+            <summary style="font-family: var(--font-heading); font-size: 0.9rem; cursor: pointer; color: var(--p127-slate);">
+              Decline this opportunity (Click to expand)
+            </summary>
+            <div style="margin-top: 12px; padding: 12px; background: #fafafa; border: 1px solid #ddd;">
+              <p style="font-size: 0.85rem; color: #666; margin-bottom: 8px;">
+                Declining is completely okay! Your comfort and schedule come first. Optional private reason (only shared with coordinator):
+              </p>
+              <textarea name="decline_reason" style="width: 100%; height: 80px; padding: 8px; font-size: 0.85rem; margin-bottom: 12px;" placeholder="e.g. Schedule changed, travel timing..."></textarea>
+              <button type="submit" name="response" value="decline" class="btn btn-outline" style="width: 100%;">
+                Decline this opportunity
+              </button>
+            </div>
+          </details>
+        </div>
+      </form>
+    </div>
+
+    <footer style="text-align: center; margin-top: var(--space-xl); font-size: 0.8rem; color: #888;">
+      <p>SUPPORT · ENCOURAGEMENT · RESOURCES · CONNECTION</p>
+      <p style="margin-top: 4px;"><a href="https://www.project127.org" target="_blank" style="color: #888;">Project 1.27</a></p>
+    </footer>
+  </div>
+</body>
+</html>
