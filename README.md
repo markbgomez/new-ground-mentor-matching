@@ -37,9 +37,16 @@ The **New Ground Match Agent** assists the New Ground Program Coordinator at Pro
 ├── ui/                   # Project 1.27 brand stylesheets (theme.css, components.css)
 ├── infra/                # GCP setup, deployment, authorization, and teardown scripts
 ├── evals/                # Automated evaluation suite and results
-├── docs/                 # Build documentation, intake mapping, brand guide
+├── docs/                 # Build documentation (agent_build_document.md), intake mapping, brand guide
 └── config/               # Matching weights, access allow-list, messaging settings
 ```
+
+---
+
+## Documentation
+
+- [**Agent Build Document**](docs/agent_build_document.md) — Comprehensive hackathon build document covering the user burden, architecture, verbatim prompts, GCP stack & lifecycle costs, security/permissions, 7-scenario evaluation suite, and full reproduction instructions.
+- [**Intake Mapping Matrix**](docs/intake_mapping.md) — Mentor and mentee questionnaire fields and scoring weights.
 
 ---
 
